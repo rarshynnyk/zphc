@@ -1,0 +1,20 @@
+{
+  "name": "zphc",
+  "version": "1.0.0",
+  "description": "My sweet Nuxt.js project",
+  "author": "Ruslan Arshinnik",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "normalize.css": "^8.0.1",
+    "nuxt": "^2.0.0"
+  },
+  "devDependencies": {
+    "sass-loader": "^7.2.0"
+  }
+}
