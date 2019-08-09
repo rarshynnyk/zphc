@@ -18,7 +18,7 @@
         <img :src="src" :alt="alt" class="logo" />
         <form @submit.prevent="submit(model)">
           <vue-input v-model="model.code" label="Type Anti-Counterfeiting code:" />
-          <vue-button type="submit">check</vue-button>
+          <vue-button type="submit">CHECK</vue-button>
         </form>
       </vue-panel-body>
     </vue-panel>
@@ -36,6 +36,8 @@ import VueStep from "~/components/ui/VueStep.vue";
 import ButtonsGroup from "~/components/ui/ButtonsGroup.vue";
 
 import img from "~/assets/images/zphc.png";
+
+import txt from "~/assets/zphcCode.txt";
 
 export default {
   components: {
@@ -72,9 +74,19 @@ export default {
     };
   },
 
+  computed: {
+    codes() {
+      return txt.split(/\r?\n/) || [];
+    }
+  },
+
   methods: {
-    submit(data) {
-      console.log(data);
+    submit({ code }) {
+      if (this.codes.includes(code)) {
+        alert("Success");
+      } else {
+        alert("Please, type a valid serial number");
+      }
     }
   }
 };

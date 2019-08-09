@@ -42,6 +42,7 @@ export default {
   font-size: 80%;
   margin-bottom: 10px;
   text-align: left;
+  outline: none;
 }
 
 input {

@@ -36,6 +36,7 @@ export default {
   line-height: 40px;
   margin: 0 auto;
   font-size: 18px;
+  outline: none;
 }
 
 .btn:hover {

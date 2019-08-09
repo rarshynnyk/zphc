@@ -11,10 +11,12 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
+    "dotenv": "^8.0.0",
     "normalize.css": "^8.0.1",
     "nuxt": "^2.0.0"
   },
   "devDependencies": {
+    "raw-loader": "^3.1.0",
     "sass-loader": "^7.2.0"
   }
 }
