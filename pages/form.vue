@@ -15,17 +15,28 @@
           :header="step.header"
           :text="step.text"
         />
+        <br />
         <img :src="src" :alt="alt" class="logo" />
         <form @submit.prevent="submit(model)">
           <vue-input v-model="model.code" label="Type Anti-Counterfeiting code:" />
+          <vue-recaptcha sitekey="Your key here"/>
+          <vue-input v-model="model.captcha" label="Type the captcha code from the image:" />
           <vue-button type="submit">CHECK</vue-button>
         </form>
+        <br />
+        <br />
+        <br />
+        <p class="support">
+          Our
+          <a href="mailto:support@zphc.hk">support team</a> stands ready to assist you.
+        </p>
       </vue-panel-body>
     </vue-panel>
   </vue-container>
 </template>
 
 <script>
+import VueRecaptcha from "vue-recaptcha";
 import VueContainer from "~/components/ui/VueContainer.vue";
 import VuePanel from "~/components/ui/VuePanel.vue";
 import VuePanelHeading from "~/components/ui/VuePanelHeading.vue";
@@ -41,6 +52,7 @@ import txt from "~/assets/zphcCode.txt";
 
 export default {
   components: {
+    VueRecaptcha,
     VueContainer,
     VuePanel,
     VuePanelHeading,
@@ -84,8 +96,10 @@ export default {
     submit({ code }) {
       if (this.codes.includes(code)) {
         alert("Success");
-      } else {
+      } else if (!code) {
         alert("Please, type a valid serial number");
+      } else if (code && !captcha) {
+        alert("Please, type a valid text shown in the image");
       }
     }
   }
@@ -96,5 +110,22 @@ export default {
 .logo {
   padding-top: 20px;
   padding-bottom: 25px;
+}
+
+.support {
+  font-size: 85%;
+  text-align: left;
+}
+
+.support a {
+  color: #00004d;
+}
+
+.btn {
+  min-width: 180px;
+}
+
+p:last-child {
+  margin-bottom: 0;
 }
 </style>
