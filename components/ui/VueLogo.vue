@@ -24,7 +24,6 @@ export default {
 <style scoped>
 .logo {
   display: block;
-  margin-bottom: 30px;
 }
 
 img {

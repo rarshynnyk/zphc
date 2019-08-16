@@ -13,10 +13,10 @@ export default {
 <style>
 .buttons-group {
   max-width: 250px;
-  margin: 0 auto;
+  margin: 0 auto 35px;
 }
 
 .buttons-group .btn:not(:last-child) {
-  margin-bottom: 10px;
+  margin-bottom: 17px;
 }
 </style>

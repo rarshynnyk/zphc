@@ -15,12 +15,22 @@
           :header="step.header"
           :text="step.text"
         />
-        <br />
         <img :src="src" :alt="alt" class="logo" />
         <form @submit.prevent="submit(model)">
           <vue-input v-model="model.code" label="Type Anti-Counterfeiting code:" />
-          <vue-recaptcha sitekey="Your key here"/>
+          <vue-captcha @ready="getCode" />
+          <br />
+          <br />
           <vue-input v-model="model.captcha" label="Type the captcha code from the image:" />
+          <br />
+          <vue-alert v-if="validateSuccess" color="success">
+            {{ code }}
+            <br />CODE IS VALID
+          </vue-alert>
+          <vue-alert v-if="validateFailure" color="error">
+            {{ code }}
+            <br />CODE IS NOT VALID
+          </vue-alert>
           <vue-button type="submit">CHECK</vue-button>
         </form>
         <br />
@@ -36,23 +46,24 @@
 </template>
 
 <script>
-import VueRecaptcha from "vue-recaptcha";
-import VueContainer from "~/components/ui/VueContainer.vue";
-import VuePanel from "~/components/ui/VuePanel.vue";
-import VuePanelHeading from "~/components/ui/VuePanelHeading.vue";
-import VuePanelBody from "~/components/ui/VuePanelBody.vue";
-import VueButton from "~/components/ui/VueButton.vue";
-import VueInput from "~/components/ui/VueInput.vue";
-import VueStep from "~/components/ui/VueStep.vue";
-import ButtonsGroup from "~/components/ui/ButtonsGroup.vue";
+import VueCaptcha from '~/components/ui/VueCaptcha.vue'
+import VueContainer from '~/components/ui/VueContainer.vue'
+import VuePanel from '~/components/ui/VuePanel.vue'
+import VuePanelHeading from '~/components/ui/VuePanelHeading.vue'
+import VuePanelBody from '~/components/ui/VuePanelBody.vue'
+import VueButton from '~/components/ui/VueButton.vue'
+import VueInput from '~/components/ui/VueInput.vue'
+import VueStep from '~/components/ui/VueStep.vue'
+import VueAlert from '~/components/ui/VueAlert.vue'
+import ButtonsGroup from '~/components/ui/ButtonsGroup.vue'
 
-import img from "~/assets/images/zphc.png";
+import img from '~/assets/images/zphc.png'
 
-import txt from "~/assets/zphcCode.txt";
+import txt from '~/assets/zphcCode.txt'
 
 export default {
   components: {
-    VueRecaptcha,
+    VueCaptcha,
     VueContainer,
     VuePanel,
     VuePanelHeading,
@@ -60,50 +71,74 @@ export default {
     VueButton,
     VueInput,
     VueStep,
-    ButtonsGroup
+    VueAlert,
+    ButtonsGroup,
+  },
+
+  head: {
+    title: 'ZPHC.HK Anti-Counterfeiting Center',
   },
 
   data() {
     return {
       src: img,
-      alt: "zphc",
+      alt: 'zphc',
       steps: [
         {
-          header: "Step 1",
+          header: 'Step 1',
           text:
-            "Observe the sticker carefully before you open the kit. </br>It should be intact and the fibers must be embedded into the Anti-Counterfeiting sticker."
+            'Observe the sticker carefully before you open the kit. </br>It should be intact and the fibers must be embedded into the Anti-Counterfeiting sticker.',
         },
         {
-          header: "Step 2",
+          header: 'Step 2',
           text:
-            "Query the serial symbols on the sticker. </br>Enter them in the below verification form and press 'Check'."
-        }
+            "Query the serial symbols on the sticker. </br>Enter them in the below verification form and press 'Check'.",
+        },
       ],
+      code: null,
       model: {
-        code: "",
-        captcha: ""
-      }
-    };
+        code: '',
+        captcha: '',
+      },
+      validateSuccess: false,
+      validateFailure: false,
+    }
   },
 
   computed: {
     codes() {
-      return txt.split(/\r?\n/) || [];
-    }
+      return txt.split(/\r?\n/) || []
+    },
   },
 
   methods: {
-    submit({ code }) {
-      if (this.codes.includes(code)) {
-        alert("Success");
-      } else if (!code) {
-        alert("Please, type a valid serial number");
+    getCode(code) {
+      this.code = code
+    },
+
+    toggleValidation(success, failure) {
+      ;(this.validateSuccess = success), (this.validateFailure = failure)
+    },
+
+    submit({ code, captcha }) {
+      if (!code) {
+        return alert('Please, type a valid serial number')
       } else if (code && !captcha) {
-        alert("Please, type a valid text shown in the image");
+        return alert('Please, type a valid text shown in the image')
+      } else if (code && captcha && captcha !== this.code) {
+        return alert(
+          'Wrong text is typed. Please, make sure you have typed the correct text from the image.'
+        )
+      } else if (code && captcha && captcha === this.code) {
+        if (this.codes.includes(code)) {
+          this.toggleValidation(true, false)
+        } else {
+          this.toggleValidation(false, true)
+        }
       }
-    }
-  }
-};
+    },
+  },
+}
 </script>
 
 <style scoped>
