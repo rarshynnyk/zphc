@@ -2,7 +2,7 @@
   <vue-container>
     <vue-panel offset>
       <vue-panel-heading>
-        <h2>ZPHC.HK Anti-Counterfeiting Center</h2>
+        <h2>ZPHC.TK Anti-Counterfeiting Center</h2>
       </vue-panel-heading>
       <vue-panel-body>
         <p>In order to assure all of you are enjoying the benefits of authentic ZPHC™ products, our company is actively finding the solutions to verify authenticity.</p>
@@ -24,11 +24,11 @@
           <vue-input v-model="model.captcha" label="Type the captcha code from the image:" />
           <br />
           <vue-alert v-if="validateSuccess" color="success">
-            {{ code }}
+            {{ model.code }}
             <br />CODE IS VALID
           </vue-alert>
           <vue-alert v-if="validateFailure" color="error">
-            {{ code }}
+            {{ model.code }}
             <br />CODE IS NOT VALID
           </vue-alert>
           <vue-button type="submit">CHECK</vue-button>
@@ -76,7 +76,7 @@ export default {
   },
 
   head: {
-    title: 'ZPHC.HK Anti-Counterfeiting Center',
+    title: 'ZPHC.TK Anti-Counterfeiting Center',
   },
 
   data() {
