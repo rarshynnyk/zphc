@@ -58,8 +58,7 @@ import VueAlert from '~/components/ui/VueAlert.vue'
 import ButtonsGroup from '~/components/ui/ButtonsGroup.vue'
 
 import img from '~/assets/images/zphc.png'
-
-import txt from '~/assets/zphcCode.txt'
+import api from '~/api'
 
 export default {
   components: {
@@ -105,12 +104,6 @@ export default {
     }
   },
 
-  computed: {
-    codes() {
-      return txt.split(/\r?\n/) || []
-    },
-  },
-
   methods: {
     getCode(code) {
       this.code = code
@@ -120,23 +113,26 @@ export default {
       ;(this.validateSuccess = success), (this.validateFailure = failure)
     },
 
-    submit({ code, captcha }) {
+    async submit({ code, captcha }) {
       if (!code) {
-        return alert('Please, type a valid serial number')
-      } else if (code && !captcha) {
-        return alert('Please, type a valid text shown in the image')
-      } else if (code && captcha && captcha !== this.code) {
-        return alert(
-          'Wrong text is typed. Please, make sure you have typed the correct text from the image.'
-        )
-      } else if (code && captcha && captcha === this.code) {
-        if (this.codes.includes(code)) {
-          this.toggleValidation(true, false)
-        } else {
-          this.toggleValidation(false, true)
-        }
+        throw new Error('Please, type a valid serial number');
       }
-    },
+      
+      if (!captcha) {
+        throw new Error('Please, type a valid text shown in the image');
+      }
+
+      if (captcha !== this.code) {
+        throw new Error('Wrong text is typed. Please, make sure you have typed the correct text from the image.');
+      }
+
+      try {
+        await api.validateCode(code);
+        this.toggleValidation(true, false);
+      } catch (e) {
+        this.toggleValidation(false, true);
+      }
+    }
   },
 }
 </script>
